@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+
 import numpy
 import os
 
-from nmt import train
+from model.attention_nmt.nmt import train
 
 def main(job_id, params):
     print params
@@ -18,12 +20,12 @@ def main(job_id, params):
                                         maxlen=50,
                                         batch_size=32,
                                         valid_batch_size=32,
-					datasets=['../../../data/zh/no_seg/ted.zh.no_seg.train', 
-					          '../../../data/en/ted.en.train'],
-					valid_datasets=['../../../data/zh/no_seg/ted.zh.no_seg.dev', 
-					                '../../../data/en/ted.en.dev'],
-					dictionaries=['../../../data/zh/no_seg/ted.zh.no_seg.train.pkl', 
-					              '../../../data/en/ted.en.train.pkl'],
+					datasets=['/ichec/home/users/%s/data/europarl-v7.fr-en.en.tok'%os.environ['USER'], 
+					'/ichec/home/users/%s/data/europarl-v7.fr-en.fr.tok'%os.environ['USER']],
+					valid_datasets=['/ichec/home/users/%s/data/newstest2011.en.tok'%os.environ['USER'], 
+					'/ichec/home/users/%s/data/newstest2011.fr.tok'%os.environ['USER']],
+					dictionaries=['/ichec/home/users/%s/data/europarl-v7.fr-en.en.tok.pkl'%os.environ['USER'], 
+					'/ichec/home/users/%s/data/europarl-v7.fr-en.fr.tok.pkl'%os.environ['USER']],
                                         validFreq=5000,
                                         dispFreq=10,
                                         saveFreq=5000,
@@ -33,8 +35,8 @@ def main(job_id, params):
 
 if __name__ == '__main__':
     main(0, {
-        'model': ['../../experiments/attention_nmt_zh-en_seg/model.npz'],
-        'dim_word': [512],
+        'model': ['/ichec/home/users/%s/models/model_session2.npz'%os.environ['USER']],
+        'dim_word': [500],
         'dim': [1024],
         'n-words': [30000], 
         'optimizer': ['adadelta'],

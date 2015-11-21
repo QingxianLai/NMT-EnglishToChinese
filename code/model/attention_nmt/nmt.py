@@ -1131,7 +1131,8 @@ def train(dim_word=100,  # word vector dimensionality
             f_update(lrate)
 
             ud = time.time() - ud_start
-
+            
+            print cost
             # check for bad numbers, usually we remove non-finite elements
             # and continue training - but not done here
             if numpy.isnan(cost) or numpy.isinf(cost):
@@ -1204,7 +1205,7 @@ def train(dim_word=100,  # word vector dimensionality
                 valid_errs = pred_probs(f_log_probs, prepare_data,
                                         model_options, valid)
                 valid_err = valid_errs.mean()
-                history_errs.append(valid_err)
+                history_errs.append((cost,valid_err))
 
                 if uidx == 0 or valid_err <= numpy.array(history_errs).min():
                     best_p = unzip(tparams)

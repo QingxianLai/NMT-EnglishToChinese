@@ -4,7 +4,7 @@
 #PBS -l walltime=60:00:00
 #PBS -l mem=5GB
 #PBS -N default
-#PBS -j -oe
+#PBS -j oe
 
 cd "$(dirname "$0")"
 cd ../../../

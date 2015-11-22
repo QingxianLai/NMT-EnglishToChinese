@@ -6,10 +6,13 @@
 #PBS -N default
 #PBS -j -oe
 
+cd "$(dirname "$0")"
+cd ../../../
+
 module purge
 
 module load cuda/7.0.28
 module load theano/0.7.0
 module load ipdb/0.8
 
-THEANO_FLAGS=device=gpu,floatX=float32 python -u train_nmt.py
+THEANO_FLAGS=device=gpu,floatX=float32 python -u -m code.experiments.attention_nmt_seg.train_nmt 

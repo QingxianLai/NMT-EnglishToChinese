@@ -2,7 +2,7 @@
 
 #PBS -l nodes=1:ppn=1:gpus=1
 #PBS -l walltime=60:00:00
-#PBS -l men=5GB
+#PBS -l mem=5GB
 #PBS -N default
 #PBS -j -oe
 

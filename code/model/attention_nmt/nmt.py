@@ -1132,7 +1132,6 @@ def train(dim_word=100,  # word vector dimensionality
 
             ud = time.time() - ud_start
             
-            print cost
             # check for bad numbers, usually we remove non-finite elements
             # and continue training - but not done here
             if numpy.isnan(cost) or numpy.isinf(cost):

@@ -6,8 +6,7 @@
 #PBS -N default
 #PBS -j oe
 
-cd "$(dirname "$0")"
-cd ../../../
+cd ./NLUDR/NMT-EnglishToChinese/
 
 module purge
 

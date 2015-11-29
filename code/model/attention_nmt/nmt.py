@@ -1206,11 +1206,11 @@ def train(dim_word=100,  # word vector dimensionality
                 valid_err = valid_errs.mean()
                 history_errs.append((cost,valid_err))
 
-                if uidx == 0 or valid_err <= numpy.array(history_errs).min():
+                if uidx == 0 or valid_err <= numpy.array(history_errs)[:,1].min():
                     best_p = unzip(tparams)
                     bad_counter = 0
                 if len(history_errs) > patience and valid_err >= \
-                        numpy.array(history_errs)[:-patience].min():
+                        numpy.array(history_errs)[:,1][:-patience].min():
                     bad_counter += 1
                     if bad_counter > patience:
                         print 'Early Stop!'

@@ -19,6 +19,10 @@ from collections import OrderedDict
 
 from data_iterator import TextIterator
 
+# for convlution and pooling
+from theano.tensor.nnet import conv
+from theano.tensor.signal import downsample
+
 profile = False
 
 
@@ -79,6 +83,7 @@ def load_params(path, params):
 layers = {'ff': ('param_init_fflayer', 'fflayer'),
           'gru': ('param_init_gru', 'gru_layer'),
           'gru_cond': ('param_init_gru_cond', 'gru_cond_layer'),
+          'conv_maxpool': ('param_init_conv_maxpool', 'conv_maxpool_layer'),
           }
 
 
@@ -102,6 +107,27 @@ def norm_weight(nin, nout=None, scale=0.01, ortho=True):
     else:
         W = scale * numpy.random.randn(nin, nout)
     return W.astype('float32')
+
+
+def uniform_conv_weight(w_shp, bound, name, scale):
+    if scale is None:
+        scale = 1
+    rng = numpy.random.RandomState(23455)
+    W = numpy.asarray(
+            rng.uniform(
+                low=-1.0 / bound,
+                high=1.0/bound,
+                size=w_shp
+                ),
+            dtype='float32')
+    return theano.shared(W, name=name)
+
+def uniform_conv_bias(b_shp, name):
+    rng = numpy.random.RandomState(23455)
+    b = numpy.asarray(
+            rng.uniform(low=-.5, high=.5, size=b_shp),
+            dtype='float32')
+    return theanp.shared(b, name=name)
 
 
 def tanh(x):
@@ -212,6 +238,17 @@ def param_init_fflayer(options, params, prefix='ff', nin=None, nout=None,
 
     return params
 
+# convolution + maxpool layer
+def param_init_conv_maxpool(options, params, prefix='conv_maxpool', kshape=None, pshape=None):
+    assert len(kshape) is len(pshape)
+    for k, p in zip(kshape, pshape):
+        this_w_bound = numpy.sqrt(k[1]*k[2]*k[3])
+        this_b_shp = (k[0])
+        params[_p(prefix), 'W'+str(i)] = uniform_conv_weight(k, this_w_bound, 'W'+str(i))
+        params[_p(prefix), 'b'+str(i)] = uniform_conv_bias(this_b_shp, 'b'+str(i))
+        params[_p(prefix), 'p'+str(i)] = (p ,1)
+    return params
+
 
 def fflayer(tparams, state_below, options, prefix='rconv',
             activ='lambda x: tensor.tanh(x)', **kwargs):
@@ -250,6 +287,22 @@ def param_init_gru(options, params, prefix='gru', nin=None, dim=None):
     return params
 
 
+# conv+maxpooling layer feedforward
+def conv_maxpool_layer(tparams, input, options, prefix='conv_maxpool', **kwargs):
+    this_option = options.get('conv_maxpool')
+    n_layer = len(this_option.get('conv'))  # TODO add n_layer in option.conv
+    last_out = input
+    for i in range(n_layer):
+        this_W = tparams[_p(prefix, 'W'+str(i))]  # FIXME wtf is tpaprams
+        this_b = tparams[_p(prefix, 'b'+str(i))]
+        this_p = tparams[_p(prefix, 'p'+str(i))]
+        conv_out = conv.conv2d(last_out, this_W) + this_b.dimshuffle('x',0,'x','x')
+        pool_out = downsample.max_pool_2d(conv_out, this_p, ignore_border=True)
+        last_out = pool_out
+    return last_out
+
+
+# GRU layer feedforward function
 def gru_layer(tparams, state_below, options, prefix='gru', mask=None,
               **kwargs):
     nsteps = state_below.shape[0]
@@ -554,10 +607,17 @@ def build_model(tparams, options):
     n_timesteps_trg = y.shape[0]
     n_samples = x.shape[1]
 
-    # word embedding for forward rnn (source)
+    # word embedding for forward conv (source)
     emb = tparams['Wemb'][x.flatten()]
     emb = emb.reshape([n_timesteps, n_samples, options['dim_word']])
-    proj = get_layer(options['encoder'])[1](tparams, emb, options,
+    emb = emb[:, :, :, None]  # augment to 2d
+
+    # convolution and maxpooling
+    conv_out = get_layer(options['conv_maxpool'])(tparams, emb, options,
+                                                prefix='conv_maxpool')
+    conv_out = conv_out[:, :, :, 0]  # shrink back to 1d
+
+    proj = get_layer(options['encoder'])[1](tparams, conv_out, options,
                                             prefix='encoder',
                                             mask=x_mask)
     # word embedding for backward rnn (source)
@@ -987,6 +1047,7 @@ def train(dim_word=100,  # word vector dimensionality
               '/data/lisatmp3/chokyun/europarl/europarl-v7.fr-en.fr.tok.pkl'],
           use_dropout=False,
           reload_=False):
+             # TODO add conv ; adjust rnn encoder
 
     # Model options
     model_options = locals().copy()

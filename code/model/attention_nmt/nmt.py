@@ -6,7 +6,7 @@ import theano.tensor as tensor
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 import cPickle as pkl
-import ipdb
+import pdb
 import numpy
 import copy
 
@@ -827,7 +827,7 @@ def pred_probs(f_log_probs, prepare_data, options, iterator, verbose=True):
             probs.append(pp)
 
         if numpy.isnan(numpy.mean(probs)):
-            ipdb.set_trace()
+            pdb.set_trace()
 
         if verbose:
             print >>sys.stderr, '%d samples computed' % (n_done)
@@ -1218,7 +1218,7 @@ def train(dim_word=100,  # word vector dimensionality
                         break
 
                 if numpy.isnan(valid_err):
-                    ipdb.set_trace()
+                    pdb.set_trace()
 
                 print 'Valid ', valid_err
 

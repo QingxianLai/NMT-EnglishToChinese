@@ -18,11 +18,11 @@ def main(job_id, params):
                                         maxlen=50,
                                         batch_size=32,
                                         valid_batch_size=32,
-					datasets=['/home/ql516/NLUDR/NMT-EnglishToChinese/data/zh/seg/zh.train.seg.tok',
+					datasets=['/home/ql516/NLUDR/NMT-EnglishToChinese/data/zh/no_seg/zh.train.no_seg.tok',
 					'/home/ql516/NLUDR/NMT-EnglishToChinese/data/en/train.en.tok'],
-					valid_datasets=['/home/ql516/NLUDR/NMT-EnglishToChinese/data/zh/seg/zh.dev.seg.tok',
+					valid_datasets=['/home/ql516/NLUDR/NMT-EnglishToChinese/data/zh/no_seg/zh.dev.no_seg.tok',
 				        '/home/ql516/NLUDR/NMT-EnglishToChinese/data/en/dev.en.tok'],
-					dictionaries=['/home/ql516/NLUDR/NMT-EnglishToChinese/data/zh/seg/zh.train.seg.tok.pkl',
+					dictionaries=['/home/ql516/NLUDR/NMT-EnglishToChinese/data/zh/no_seg/zh.train.no_seg.tok.pkl',
 					'/home/ql516/NLUDR/NMT-EnglishToChinese/data/en/train.en.tok.pkl'],
                                         validFreq=5000,
                                         dispFreq=10,
@@ -33,7 +33,7 @@ def main(job_id, params):
 
 if __name__ == '__main__':
     main(0, {
-        'model': ['/home/ql516/NLUDR/NMT-EnglishToChinese/code/experiments/attention_nmt_seg/model.npz'],
+        'model': ['/home/ql516/NLUDR/NMT-EnglishToChinese/code/experiments/attention_nmt_no_seg/model.npz'],
         'dim_word': [500],
         'dim': [1024],
         'n-words': [30000],

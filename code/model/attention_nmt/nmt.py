@@ -614,7 +614,9 @@ def build_model(tparams, options):
     logit_ctx = get_layer('ff')[1](tparams, ctxs, options,
                                    prefix='ff_logit_ctx', activ='linear')
     logit = tensor.tanh(logit_lstm+logit_prev+logit_ctx)
-    logit = get_layer('ff')[1](tparams, logit, options,
+    if options['use_dropout']:
+        logit = dropout_layer(logit, use_noise, trng)
+    logit = get_layer('ff')[1](tparams, logit, options, 
                                prefix='ff_logit', activ='linear')
     logit_shp = logit.shape
     probs = tensor.nnet.softmax(logit.reshape([logit_shp[0]*logit_shp[1],
@@ -1131,7 +1133,7 @@ def train(dim_word=100,  # word vector dimensionality
             f_update(lrate)
 
             ud = time.time() - ud_start
-            
+
             # check for bad numbers, usually we remove non-finite elements
             # and continue training - but not done here
             if numpy.isnan(cost) or numpy.isinf(cost):
@@ -1204,13 +1206,13 @@ def train(dim_word=100,  # word vector dimensionality
                 valid_errs = pred_probs(f_log_probs, prepare_data,
                                         model_options, valid)
                 valid_err = valid_errs.mean()
-                history_errs.append((cost,valid_err))
+                history_errs.append(valid_err)
 
-                if uidx == 0 or valid_err <= numpy.array(history_errs)[:,1].min():
+                if uidx == 0 or valid_err <= numpy.array(history_errs).min():
                     best_p = unzip(tparams)
                     bad_counter = 0
                 if len(history_errs) > patience and valid_err >= \
-                        numpy.array(history_errs)[:,1][:-patience].min():
+                        numpy.array(history_errs)[:-patience].min():
                     bad_counter += 1
                     if bad_counter > patience:
                         print 'Early Stop!'

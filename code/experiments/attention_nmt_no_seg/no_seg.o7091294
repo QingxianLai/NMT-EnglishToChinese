@@ -9355,3 +9355,189 @@ Epoch  10 Update  64830 Cost  53.212348938 UD  1.06119203568
 Epoch  10 Update  64840 Cost  26.5121135712 UD  1.03660988808
 Epoch  10 Update  64850 Cost  38.4305915833 UD  1.03130722046
 Epoch  10 Update  64860 Cost  37.8343811035 UD  0.957458019257
+Epoch  10 Update  64870 Cost  49.0214042664 UD  1.25840806961
+Epoch  10 Update  64880 Cost  38.754940033 UD  1.10959196091
+Epoch  10 Update  64890 Cost  32.9602851868 UD  1.09509396553
+Epoch  10 Update  64900 Cost  23.1971874237 UD  1.00885486603
+Epoch  10 Update  64910 Cost  42.8578071594 UD  1.18262505531
+Epoch  10 Update  64920 Cost  42.0663909912 UD  0.857291936874
+Epoch  10 Update  64930 Cost  35.2383155823 UD  1.16927599907
+Epoch  10 Update  64940 Cost  58.8476409912 UD  1.30561804771
+Epoch  10 Update  64950 Cost  43.9101295471 UD  1.36302781105
+Epoch  10 Update  64960 Cost  39.3960723877 UD  0.987019062042
+Epoch  10 Update  64970 Cost  34.6795387268 UD  1.31420898438
+Epoch  10 Update  64980 Cost  28.8821716309 UD  1.23773598671
+Epoch  10 Update  64990 Cost  35.9139137268 UD  1.10433793068
+Epoch  10 Update  65000 Cost  40.8164558411 UD  1.10530996323
+Saving... Done
+Source  0 :  这 完 全 算 不 上 。 你 不 可 能 拥 有 无 限 的 权 利 的 地 位 ， 如 果 你 不 得 不 整 天 跟 你 妈 呆 在 一 起 。
+Truth  0  :  It was something that -- it 's just there were limits to how powerful and important you could be if you had to live at home with your mother .
+Sample  0 :  They couldn 't be attached to the Big justice , if you had to depend upon your mother , as you know .
+Source  1 :  然 后 ， 快 克 出 现 了 。
+Truth  1  :  Then along comes crack cocaine .
+Sample  1 :  Alright of it .
+Source  2 :  用 M a l c o l m G l a d w e l l 的 话 说 ， 这 东 西 就 是 城 市 的 一 盘 大 菜 。
+Truth  2  :  And in the words of Malcolm Gladwell , crack cocaine was the extra-chunky version of tomato sauce for the inner city .
+Sample  2 :  And , in the Eagle 1963 , it was , you know the Great markets .
+Source  3 :  因 为 片 状 可 卡 因 是 一 个 令 人 难 以 置 信 的 创 造 。
+Truth  3  :  Because crack cocaine was an unbelievable innovation .
+Sample  3 :  So Nice joint matters .
+Source  4 :  我 今 天 没 空 说 这 个 了 。
+Truth  4  :  I don 't have time to talk about it today .
+Sample  4 :  I did all that , OK ?
+32 samples computed
+64 samples computed
+96 samples computed
+128 samples computed
+160 samples computed
+192 samples computed
+224 samples computed
+256 samples computed
+288 samples computed
+320 samples computed
+352 samples computed
+384 samples computed
+416 samples computed
+448 samples computed
+480 samples computed
+512 samples computed
+544 samples computed
+576 samples computed
+608 samples computed
+640 samples computed
+672 samples computed
+704 samples computed
+736 samples computed
+768 samples computed
+800 samples computed
+832 samples computed
+864 samples computed
+896 samples computed
+928 samples computed
+960 samples computed
+992 samples computed
+1024 samples computed
+1056 samples computed
+1088 samples computed
+1120 samples computed
+1152 samples computed
+1184 samples computed
+1216 samples computed
+1248 samples computed
+1280 samples computed
+1312 samples computed
+1344 samples computed
+1376 samples computed
+1408 samples computed
+1440 samples computed
+1472 samples computed
+1504 samples computed
+1536 samples computed
+1568 samples computed
+1600 samples computed
+1632 samples computed
+1664 samples computed
+1696 samples computed
+1728 samples computed
+1760 samples computed
+1792 samples computed
+1824 samples computed
+1856 samples computed
+1888 samples computed
+1920 samples computed
+1952 samples computed
+1984 samples computed
+2016 samples computed
+2048 samples computed
+2080 samples computed
+2112 samples computed
+2144 samples computed
+2176 samples computed
+2208 samples computed
+2240 samples computed
+2272 samples computed
+2304 samples computed
+2336 samples computed
+2368 samples computed
+2400 samples computed
+2432 samples computed
+2464 samples computed
+2496 samples computed
+2528 samples computed
+2560 samples computed
+2592 samples computed
+2624 samples computed
+2656 samples computed
+2688 samples computed
+2720 samples computed
+2752 samples computed
+2784 samples computed
+2816 samples computed
+2848 samples computed
+2880 samples computed
+2912 samples computed
+2944 samples computed
+2976 samples computed
+3008 samples computed
+3040 samples computed
+3072 samples computed
+3104 samples computed
+3136 samples computed
+3168 samples computed
+3200 samples computed
+3232 samples computed
+3264 samples computed
+3296 samples computed
+3328 samples computed
+3360 samples computed
+3392 samples computed
+3424 samples computed
+3456 samples computed
+3488 samples computed
+3520 samples computed
+3552 samples computed
+3584 samples computed
+3616 samples computed
+3648 samples computed
+3680 samples computed
+3712 samples computed
+3744 samples computed
+3776 samples computed
+3808 samples computed
+3840 samples computed
+3872 samples computed
+3904 samples computed
+3936 samples computed
+3968 samples computed
+4000 samples computed
+4032 samples computed
+4064 samples computed
+4096 samples computed
+4128 samples computed
+4160 samples computed
+4192 samples computed
+4224 samples computed
+4256 samples computed
+4288 samples computed
+4320 samples computed
+4352 samples computed
+4384 samples computed
+4416 samples computed
+4448 samples computed
+4480 samples computed
+4512 samples computed
+4544 samples computed
+4576 samples computed
+4608 samples computed
+4640 samples computed
+4672 samples computed
+4704 samples computed
+4736 samples computed
+4768 samples computed
+4800 samples computed
+4832 samples computed
+4864 samples computed
+4896 samples computed
+4928 samples computed
+4937 samples computed
+Valid  63.6162

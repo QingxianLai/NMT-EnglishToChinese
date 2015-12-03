@@ -2,6 +2,6 @@
 *.npz.pkl
 **/.DS_Store
 *.pyc
-*.7091294
+code/experiments/attention_nmt_no_seg/no_seg.o7091294
 
 

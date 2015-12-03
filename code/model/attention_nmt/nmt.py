@@ -297,13 +297,14 @@ def param_init_gru(options, params, prefix='gru', nin=None, dim=None):
 # conv+maxpooling layer feedforward
 def conv_maxpool_layer(tparams, input, options, prefix='conv_maxpool', **kwargs):
     n_layer = len(options.get('kshape'))
+    pool = options.get('pool')
     last_out = input
     for i in range(n_layer):
         this_W = tparams[_p(prefix, 'W'+str(i))]
         this_b = tparams[_p(prefix, 'b'+str(i))]
         conv_out = conv.conv2d(last_out, this_W, border_mode='full') + this_b.dimshuffle('x',0,'x','x')
         conv_out = tensor.nnet.relu(conv_out)
-        pool_out = downsample.max_pool_2d(conv_out, (1, 1), ignore_border=False)  # FIXME fucking stupid and no pooling for now!
+        pool_out = downsample.max_pool_2d(conv_out, (pool[i], 1), ignore_border=False)  # FIXME fucking stupid and no pooling for now!
         last_out = pool_out
     return last_out
 
@@ -1056,6 +1057,7 @@ def train(dim_word=100,  # word vector dimensionality
           kshape=((128, 100, 3, 1),
                   (128, 128, 3, 1),
                   (100, 128, 3, 1)),
+          pool=(1,2,1),
           dim=1000,  # the number of LSTM units
           conv='conv_maxpool',
           encoder='gru',

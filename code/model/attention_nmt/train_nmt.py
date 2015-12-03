@@ -8,6 +8,7 @@ def main(job_id, params):
     validerr = train(saveto=params['model'][0],
                                         reload_=params['reload'][0],
                                         dim_word=params['dim_word'][0],
+                                        kshape=params['kshape'][0],
                                         dim=params['dim'][0],
                                         n_words=params['n-words'][0],
                                         n_words_src=params['n-words'][0],
@@ -35,6 +36,9 @@ if __name__ == '__main__':
     main(0, {
         'model': ['../../experiments/attention_nmt_zh-en_seg/model.npz'],
         'dim_word': [512],
+        'kshape': [((128, 512, 3, 1),
+                    (128, 128, 3, 1),
+                    (512, 128, 3, 1))],
         'dim': [1024],
         'n-words': [30000], 
         'optimizer': ['adadelta'],

@@ -217,7 +217,7 @@ def prepare_data_conv(seqs_x, seqs_y, kernels, psize, maxlen=None,
     assert len(kernels) is len(psize)
     maxlen_x_conv = float(maxlen_x)
     for i, (k,p) in enumerate(zip(kernels, psize)):
-        maxlen_x_conv -= (k - 1)
+        maxlen_x_conv += k - 1
         maxlen_x_conv = numpy.floor(maxlen_x_conv / p)
 
     x = numpy.zeros((maxlen_x, n_samples)).astype('int64')
@@ -303,7 +303,7 @@ def conv_maxpool_layer(tparams, input, options, prefix='conv_maxpool', **kwargs)
         this_b = tparams[_p(prefix, 'b'+str(i))]
         conv_out = conv.conv2d(last_out, this_W, border_mode='full') + this_b.dimshuffle('x',0,'x','x')
         conv_out = tensor.nnet.relu(conv_out)
-        pool_out = downsample.max_pool_2d(conv_out, (1, 1), ignore_border=True)  # FIXME fucking stupid and no pooling for now!
+        pool_out = downsample.max_pool_2d(conv_out, (1, 1), ignore_border=False)  # FIXME fucking stupid and no pooling for now!
         last_out = pool_out
     return last_out
 
@@ -1053,9 +1053,9 @@ def sgd(lr, tparams, grads, x, mask, y, cost):
 
 
 def train(dim_word=100,  # word vector dimensionality
-          kshape=((128, 500, 7, 1),  # TODO why 500 instead of 100?
-                  (128, 128, 7, 1),
-                  (500, 128, 3, 1)),
+          kshape=((128, 100, 3, 1),
+                  (128, 128, 3, 1),
+                  (100, 128, 3, 1)),
           dim=1000,  # the number of LSTM units
           conv='conv_maxpool',
           encoder='gru',
@@ -1088,7 +1088,6 @@ def train(dim_word=100,  # word vector dimensionality
               '/data/lisatmp3/chokyun/europarl/europarl-v7.fr-en.fr.tok.pkl'],
           use_dropout=False,
           reload_=False):
-             # TODO add conv ; adjust rnn encoder
 
     # Model options
     model_options = locals().copy()

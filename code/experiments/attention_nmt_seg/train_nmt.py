@@ -19,11 +19,11 @@ def main(job_id, params):
                                         maxlen=50,
                                         batch_size=32,
                                         valid_batch_size=32,
-					datasets=['/scratch/jakez/nmt/NMT-EnglishToChinese/data/zh/seg/zh.train.seg.tok', 
+					datasets=['/scratch/jakez/nmt/NMT-EnglishToChinese/data/zh/no_seg/zh.train.no_seg.tok', 
 					'/scratch/jakez/nmt/NMT-EnglishToChinese/data/en/train.en.tok'],
-					valid_datasets=['/scratch/jakez/nmt/NMT-EnglishToChinese/data/zh/seg/zh.dev.seg.tok', 
+					valid_datasets=['/scratch/jakez/nmt/NMT-EnglishToChinese/data/zh/no_seg/zh.dev.no_seg.tok', 
 				        '/scratch/jakez/nmt/NMT-EnglishToChinese/data/en/dev.en.tok'],	
-					dictionaries=['/scratch/jakez/nmt/NMT-EnglishToChinese/data/zh/seg/zh.train.seg.tok.pkl', 
+					dictionaries=['/scratch/jakez/nmt/NMT-EnglishToChinese/data/zh/no_seg/zh.train.no_seg.tok.pkl', 
 					'/scratch/jakez/nmt/NMT-EnglishToChinese/data/en/train.en.tok.pkl'],
                                         validFreq=5000,
                                         dispFreq=10,
@@ -34,7 +34,7 @@ def main(job_id, params):
 
 if __name__ == '__main__':
     main(0, {
-        'model': ['./attention_nmt_seg.npz'],
+        'model': ['./attention_nmt_no_seg.npz'],
         'dim_word': [500],
         'kshape': [((128, 500, 3, 1),
                     (128, 128, 3, 1),

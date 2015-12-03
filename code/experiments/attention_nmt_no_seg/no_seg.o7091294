@@ -9811,3 +9811,86 @@ Epoch  10 Update  67370 Cost  40.881778717 UD  1.06463003159
 Epoch  10 Update  67380 Cost  40.0676116943 UD  1.28392004967
 Epoch  10 Update  67390 Cost  50.1063537598 UD  1.28315591812
 Epoch  10 Update  67400 Cost  43.2800559998 UD  1.52965497971
+Epoch  10 Update  67410 Cost  45.1997947693 UD  1.06084799767
+Epoch  10 Update  67420 Cost  37.4251976013 UD  1.27842187881
+Epoch  10 Update  67430 Cost  30.6957492828 UD  0.914566040039
+Epoch  10 Update  67440 Cost  38.8219490051 UD  1.12568187714
+Epoch  10 Update  67450 Cost  43.2191696167 UD  0.991179943085
+Epoch  10 Update  67460 Cost  40.4084320068 UD  1.24008703232
+Epoch  10 Update  67470 Cost  27.5573272705 UD  1.20803594589
+Epoch  10 Update  67480 Cost  40.2516593933 UD  1.35171294212
+Epoch  10 Update  67490 Cost  31.945350647 UD  1.26662802696
+Epoch  10 Update  67500 Cost  22.820400238 UD  1.2265059948
+Epoch  10 Update  67510 Cost  29.5688972473 UD  1.58880496025
+Epoch  10 Update  67520 Cost  51.0793380737 UD  1.27977085114
+Epoch  10 Update  67530 Cost  51.361579895 UD  1.13713598251
+Epoch  10 Update  67540 Cost  43.2438812256 UD  0.973360061646
+Epoch  10 Update  67550 Cost  32.7111778259 UD  1.19494581223
+Epoch  10 Update  67560 Cost  45.3316841125 UD  1.1500749588
+Epoch  10 Update  67570 Cost  32.0278205872 UD  1.35219311714
+Epoch  10 Update  67580 Cost  38.122756958 UD  1.33953094482
+Epoch  10 Update  67590 Cost  31.9874610901 UD  1.20385909081
+Epoch  10 Update  67600 Cost  49.1447029114 UD  1.30149412155
+Epoch  10 Update  67610 Cost  35.2281455994 UD  0.968101024628
+Epoch  10 Update  67620 Cost  43.3643569946 UD  1.15327811241
+Epoch  10 Update  67630 Cost  54.0801849365 UD  1.23140001297
+Epoch  10 Update  67640 Cost  31.6095504761 UD  0.941121101379
+Epoch  10 Update  67650 Cost  47.9018630981 UD  1.24309802055
+Epoch  10 Update  67660 Cost  27.6848926544 UD  1.07970499992
+Epoch  10 Update  67670 Cost  35.8018379211 UD  0.851454019547
+Epoch  10 Update  67680 Cost  37.1501502991 UD  1.21267199516
+Epoch  10 Update  67690 Cost  43.1053276062 UD  1.08499693871
+Epoch  10 Update  67700 Cost  39.3082275391 UD  1.22139000893
+Epoch  10 Update  67710 Cost  51.8867378235 UD  0.987834215164
+Epoch  10 Update  67720 Cost  36.2311172485 UD  1.11421203613
+Epoch  10 Update  67730 Cost  29.8725662231 UD  1.03081703186
+Epoch  10 Update  67740 Cost  50.4706344604 UD  1.05646491051
+Epoch  10 Update  67750 Cost  35.0372619629 UD  1.1564438343
+Epoch  10 Update  67760 Cost  41.5901451111 UD  1.06597495079
+Epoch  10 Update  67770 Cost  41.1840133667 UD  1.10317802429
+Epoch  10 Update  67780 Cost  35.4785728455 UD  1.08310508728
+Epoch  10 Update  67790 Cost  43.3765029907 UD  1.03790903091
+Epoch  10 Update  67800 Cost  57.176399231 UD  1.43786597252
+Epoch  10 Update  67810 Cost  36.6694946289 UD  1.03985309601
+Epoch  10 Update  67820 Cost  30.2699813843 UD  1.04754400253
+Epoch  10 Update  67830 Cost  37.0886077881 UD  0.683664083481
+Epoch  10 Update  67840 Cost  38.0275154114 UD  1.32061100006
+Epoch  10 Update  67850 Cost  51.7585639954 UD  1.34665107727
+Epoch  10 Update  67860 Cost  23.8421325684 UD  1.38897609711
+Epoch  10 Update  67870 Cost  52.3479728699 UD  1.16891813278
+Epoch  10 Update  67880 Cost  60.0484275818 UD  1.43212485313
+Epoch  10 Update  67890 Cost  50.2503738403 UD  0.850536108017
+Epoch  10 Update  67900 Cost  38.8984146118 UD  1.18061900139
+Epoch  10 Update  67910 Cost  38.6386642456 UD  1.23731899261
+Epoch  10 Update  67920 Cost  45.1181182861 UD  1.02285289764
+Epoch  10 Update  67930 Cost  34.1977615356 UD  1.35406899452
+Epoch  10 Update  67940 Cost  38.1523170471 UD  0.919985055923
+Epoch  10 Update  67950 Cost  50.611530304 UD  1.38123202324
+Epoch  10 Update  67960 Cost  43.6003189087 UD  1.14922904968
+Epoch  10 Update  67970 Cost  51.9831542969 UD  1.27522206306
+Epoch  10 Update  67980 Cost  47.3632698059 UD  1.08623814583
+Epoch  10 Update  67990 Cost  45.177646637 UD  1.24663805962
+Epoch  10 Update  68000 Cost  52.4727554321 UD  1.20185995102
+Source  0 :  目 前 的 情 况 是 ： 我 们 现 在 拥 有 很 好 的 复 制 视 觉 系 统 的 技 术 。
+Truth  0  :  But now here 's the thing : Our technology has actually been pretty good at replicating what the visual system does .
+Sample  0 :  And now we have a great model .
+Source  1 :  我 们 有 电 视 ， 我 们 有 电 影 ， 我 们 有 动 画 ， 我 们 有 摄 影 、 我 们 有 模 型 识 别 技 术 ， 很 多 其 他 的 这 一 类 技 术 。
+Truth  1  :  We have TV , we have movies , we have animation , we have photography , we have pattern recognition , all of these sorts of things .
+Sample  1 :  We have electrical cameras , we have a photography , we have models admitting other incurred surgeons , and many different ones .
+Source  2 :  有 些 视 觉 技 术 的 工 作 原 理 和 视 觉 系 统 不 大 一 样 。 尽 管 如 此 ， 我 们 现 有 的 视 觉 技 术 已 经 与 视 觉 系 统 非 常 近 似 了 。
+Truth  2  :  They work differently than our visual systems in some cases , but nonetheless we 've been pretty good at making a technology work like our visual system .
+Sample  2 :  And there 's kind of gained tools in the theory of assemblage and visual systems say , according to how many perception of visual technology edges on their own mind
+Source  3 :  一 百 年 的 机 器 人 技 术 ， 我 们 甚 至 不 能 让 机 器 人 走 上 一 步 或 者 两 步 。
+Truth  3  :  A hundred years of robotics , and we can 't get a robot that can move more than a couple steps one way or the other .
+Sample  3 :  Trust them out little more steps .
+Source  4 :  你 让 机 器 人 走 个 斜 面 试 试 ， 它 们 肯 定 会 摔 倒 。
+Truth  4  :  You ask them to go up an inclined plane , and they fall over .
+Sample  4 :  We test that .
+Epoch  10 Update  68010 Cost  57.2758636475 UD  1.34496307373
+Epoch  10 Update  68020 Cost  36.680355072 UD  1.01190495491
+Epoch  10 Update  68030 Cost  31.7391338348 UD  0.95133805275
+Epoch  10 Update  68040 Cost  38.6756362915 UD  1.23956298828
+Epoch  10 Update  68050 Cost  46.4151153564 UD  1.26262593269
+Epoch  10 Update  68060 Cost  33.7673912048 UD  1.30458688736
+Epoch  10 Update  68070 Cost  45.6893806458 UD  0.99055480957
+Epoch  10 Update  68080 Cost  55.6573066711 UD  1.51030993462

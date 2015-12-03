@@ -304,7 +304,7 @@ def conv_maxpool_layer(tparams, input, options, prefix='conv_maxpool', **kwargs)
         this_b = tparams[_p(prefix, 'b'+str(i))]
         conv_out = conv.conv2d(last_out, this_W, border_mode='full') + this_b.dimshuffle('x',0,'x','x')
         conv_out = tensor.nnet.relu(conv_out)
-        pool_out = downsample.max_pool_2d(conv_out, (pool[i], 1), ignore_border=False)  # FIXME fucking stupid and no pooling for now!
+        pool_out = downsample.max_pool_2d(conv_out, (pool[i], 1), ignore_border=True)  # FIXME fucking stupid and no pooling for now!
         last_out = pool_out
     return last_out
 
@@ -911,7 +911,7 @@ def pred_probs(f_log_probs, prepare_data_conv, options, iterator, verbose=True):
 
     kshape = options.get('kshape')
     kernels = tuple([k[2] for k in kshape])
-    psize = tuple([1 for k in kshape])  # FIXME just temporarily
+    psize = options.get('pool')
 
     for x, y in iterator:
         n_done += len(x)
@@ -1212,7 +1212,7 @@ def train(dim_word=100,  # word vector dimensionality
     # Boundary stuff
     kshape = model_options.get('kshape')
     kernels = tuple([k[2] for k in kshape])
-    psize = tuple([1 for k in kshape])  # FIXME just temporarily
+    psize = model_options.get('pool')
 
     for eidx in xrange(max_epochs):
         n_samples = 0

@@ -707,7 +707,9 @@ def build_sampler(tparams, options, trng):
     print 'Building f_next..',
     inps = [y, ctx, init_state]
     outs = [next_probs, next_sample, next_state]
-    f_next = theano.function(inps, outs, name='f_next', profile=profile)
+
+# TODO: To make the simple_translater works, I made this f_next allow input downcast. may need to change back later.!!
+    f_next = theano.function(inps, outs, name='f_next', profile=profile, allow_input_downcast=True)
     print 'Done'
 
     return f_init, f_next

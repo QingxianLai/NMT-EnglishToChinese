@@ -109,7 +109,7 @@ def norm_weight(nin, nout=None, scale=0.01, ortho=True):
     return W.astype('float32')
 
 
-def uniform_conv_weight(w_shp, bound, name, scale):
+def uniform_conv_weight(w_shp, bound, scale=None):
     if scale is None:
         scale = 1
     rng = numpy.random.RandomState(23455)
@@ -120,14 +120,14 @@ def uniform_conv_weight(w_shp, bound, name, scale):
                 size=w_shp
                 ),
             dtype='float32')
-    return theano.shared(W, name=name)
+    return W
 
-def uniform_conv_bias(b_shp, name):
+def uniform_conv_bias(b_shp):
     rng = numpy.random.RandomState(23455)
     b = numpy.asarray(
             rng.uniform(low=-.5, high=.5, size=b_shp),
             dtype='float32')
-    return theanp.shared(b, name=name)
+    return b
 
 
 def tanh(x):
@@ -183,9 +183,9 @@ def concatenate(tensor_list, axis=0):
     return out
 
 
-# batch preparation
-def prepare_data(seqs_x, seqs_y, maxlen=None, n_words_src=30000,
-                 n_words=30000):
+# batch preparation with convolution
+def prepare_data_conv(seqs_x, seqs_y, kernels, psize, maxlen=None,
+                      n_words_src=30000, n_words=30000):
     # x: a list of sentences
     lengths_x = [len(s) for s in seqs_x]
     lengths_y = [len(s) for s in seqs_y]
@@ -212,10 +212,17 @@ def prepare_data(seqs_x, seqs_y, maxlen=None, n_words_src=30000,
     n_samples = len(seqs_x)
     maxlen_x = numpy.max(lengths_x) + 1
     maxlen_y = numpy.max(lengths_y) + 1
+    
+    # Handle convolution and pooling
+    assert len(kernels) is len(psize)
+    maxlen_x_conv = float(maxlen_x)
+    for i, (k,p) in enumerate(zip(kernels, psize)):
+        maxlen_x_conv -= (k - 1)
+        maxlen_x_conv = numpy.floor(maxlen_x_conv / p)
 
     x = numpy.zeros((maxlen_x, n_samples)).astype('int64')
     y = numpy.zeros((maxlen_y, n_samples)).astype('int64')
-    x_mask = numpy.zeros((maxlen_x, n_samples)).astype('float32')
+    x_mask = numpy.zeros((maxlen_x_conv, n_samples)).astype('float32')
     y_mask = numpy.zeros((maxlen_y, n_samples)).astype('float32')
     for idx, [s_x, s_y] in enumerate(zip(seqs_x, seqs_y)):
         x[:lengths_x[idx], idx] = s_x
@@ -239,14 +246,14 @@ def param_init_fflayer(options, params, prefix='ff', nin=None, nout=None,
     return params
 
 # convolution + maxpool layer
-def param_init_conv_maxpool(options, params, prefix='conv_maxpool', kshape=None, pshape=None):
-    assert len(kshape) is len(pshape)
-    for k, p in zip(kshape, pshape):
+def param_init_conv_maxpool(options, params, prefix='conv_maxpool', kshape=None):
+    if kshape is None:
+        kshape = options['kshape']
+    for i, k in enumerate(kshape):
         this_w_bound = numpy.sqrt(k[1]*k[2]*k[3])
         this_b_shp = (k[0])
-        params[_p(prefix), 'W'+str(i)] = uniform_conv_weight(k, this_w_bound, 'W'+str(i))
-        params[_p(prefix), 'b'+str(i)] = uniform_conv_bias(this_b_shp, 'b'+str(i))
-        params[_p(prefix), 'p'+str(i)] = (p ,1)
+        params[_p(prefix, 'W'+str(i))] = uniform_conv_weight(k, this_w_bound)
+        params[_p(prefix, 'b'+str(i))] = uniform_conv_bias(this_b_shp)
     return params
 
 
@@ -289,15 +296,14 @@ def param_init_gru(options, params, prefix='gru', nin=None, dim=None):
 
 # conv+maxpooling layer feedforward
 def conv_maxpool_layer(tparams, input, options, prefix='conv_maxpool', **kwargs):
-    this_option = options.get('conv_maxpool')
-    n_layer = len(this_option.get('conv'))  # TODO add n_layer in option.conv
+    n_layer = len(options.get('kshape'))
     last_out = input
     for i in range(n_layer):
-        this_W = tparams[_p(prefix, 'W'+str(i))]  # FIXME wtf is tpaprams
+        this_W = tparams[_p(prefix, 'W'+str(i))]
         this_b = tparams[_p(prefix, 'b'+str(i))]
-        this_p = tparams[_p(prefix, 'p'+str(i))]
-        conv_out = conv.conv2d(last_out, this_W) + this_b.dimshuffle('x',0,'x','x')
-        pool_out = downsample.max_pool_2d(conv_out, this_p, ignore_border=True)
+        conv_out = conv.conv2d(last_out, this_W, border_mode='full') + this_b.dimshuffle('x',0,'x','x')
+        conv_out = tensor.nnet.relu(conv_out)
+        pool_out = downsample.max_pool_2d(conv_out, (1, 1), ignore_border=True)  # FIXME fucking stupid and no pooling for now!
         last_out = pool_out
     return last_out
 
@@ -549,6 +555,12 @@ def init_params(options):
     params['Wemb'] = norm_weight(options['n_words_src'], options['dim_word'])
     params['Wemb_dec'] = norm_weight(options['n_words'], options['dim_word'])
 
+    # conv_maxpool
+    params = get_layer(options['conv'])[0](options, params, prefix='conv_maxpool',
+                                            kshape=options['kshape'])
+    params = get_layer(options['conv'])[0](options, params, prefix='conv_maxpool_r',
+                                            kshape=options['kshape'])
+
     # encoder: bidirectional RNN
     params = get_layer(options['encoder'])[0](options, params,
                                               prefix='encoder',
@@ -610,20 +622,29 @@ def build_model(tparams, options):
     # word embedding for forward conv (source)
     emb = tparams['Wemb'][x.flatten()]
     emb = emb.reshape([n_timesteps, n_samples, options['dim_word']])
-    emb = emb[:, :, :, None]  # augment to 2d
+    emb = emb.dimshuffle(1, 2, 0, 'x')
 
     # convolution and maxpooling
-    conv_out = get_layer(options['conv_maxpool'])(tparams, emb, options,
-                                                prefix='conv_maxpool')
+    conv_out = get_layer(options['conv'])[1](tparams, emb, options,
+                                          prefix='conv_maxpool')
     conv_out = conv_out[:, :, :, 0]  # shrink back to 1d
+    conv_out = conv_out.dimshuffle(2, 0, 1)
 
     proj = get_layer(options['encoder'])[1](tparams, conv_out, options,
                                             prefix='encoder',
                                             mask=x_mask)
+    ## Reverse
     # word embedding for backward rnn (source)
     embr = tparams['Wemb'][xr.flatten()]
     embr = embr.reshape([n_timesteps, n_samples, options['dim_word']])
-    projr = get_layer(options['encoder'])[1](tparams, embr, options,
+    embr = embr.dimshuffle(1, 2, 0, 'x')
+    # convolution and maxpooling
+    conv_outr = get_layer(options['conv'])[1](tparams, embr, options,
+                                          prefix='conv_maxpool_r')
+    conv_outr = conv_outr[:, :, :, 0]  # shrink back to 1d
+    conv_outr = conv_outr.dimshuffle(2, 0, 1)
+
+    projr = get_layer(options['encoder'])[1](tparams, conv_outr, options,
                                              prefix='encoder_r',
                                              mask=xr_mask)
 
@@ -703,10 +724,22 @@ def build_sampler(tparams, options, trng):
     embr = tparams['Wemb'][xr.flatten()]
     embr = embr.reshape([n_timesteps, n_samples, options['dim_word']])
 
+    # convolution
+    emb = emb.dimshuffle(1, 2, 0, 'x')
+    embr = embr.dimshuffle(1, 2, 0, 'x')
+    conv_out = get_layer(options['conv'])[1](tparams, emb, options,
+                                          prefix='conv_maxpool')
+    conv_out = conv_out[:, :, :, 0]  # shrink back to 1d
+    conv_out = conv_out.dimshuffle(2, 0, 1)
+    conv_outr = get_layer(options['conv'])[1](tparams, embr, options,
+                                          prefix='conv_maxpool_r')
+    conv_outr = conv_outr[:, :, :, 0]  # shrink back to 1d
+    conv_outr = conv_outr.dimshuffle(2, 0, 1)
+
     # encoder
-    proj = get_layer(options['encoder'])[1](tparams, emb, options,
+    proj = get_layer(options['encoder'])[1](tparams, conv_out, options,
                                             prefix='encoder')
-    projr = get_layer(options['encoder'])[1](tparams, embr, options,
+    projr = get_layer(options['encoder'])[1](tparams, conv_outr, options,
                                              prefix='encoder_r')
 
     # concatenate forward and backward rnn hidden states
@@ -870,15 +903,19 @@ def gen_sample(tparams, f_init, f_next, x, options, trng=None, k=1, maxlen=30,
 
 
 # calculate the log probablities on a given corpus using translation model
-def pred_probs(f_log_probs, prepare_data, options, iterator, verbose=True):
+def pred_probs(f_log_probs, prepare_data_conv, options, iterator, verbose=True):
     probs = []
 
     n_done = 0
 
+    kshape = options.get('kshape')
+    kernels = tuple([k[2] for k in kshape])
+    psize = tuple([1 for k in kshape])  # FIXME just temporarily
+
     for x, y in iterator:
         n_done += len(x)
 
-        x, x_mask, y, y_mask = prepare_data(x, y,
+        x, x_mask, y, y_mask = prepare_data_conv(x, y, kernels, psize,
                                             n_words_src=options['n_words_src'],
                                             n_words=options['n_words'])
 
@@ -1016,7 +1053,11 @@ def sgd(lr, tparams, grads, x, mask, y, cost):
 
 
 def train(dim_word=100,  # word vector dimensionality
+          kshape=((128, 500, 7, 1),  # TODO why 500 instead of 100?
+                  (128, 128, 7, 1),
+                  (500, 128, 3, 1)),
           dim=1000,  # the number of LSTM units
+          conv='conv_maxpool',
           encoder='gru',
           decoder='gru_cond',
           patience=10,  # early stopping patience
@@ -1166,6 +1207,12 @@ def train(dim_word=100,  # word vector dimensionality
 
     uidx = 0
     estop = False
+
+    # Boundary stuff
+    kshape = model_options.get('kshape')
+    kernels = tuple([k[2] for k in kshape])
+    psize = tuple([1 for k in kshape])  # FIXME just temporarily
+
     for eidx in xrange(max_epochs):
         n_samples = 0
 
@@ -1174,7 +1221,8 @@ def train(dim_word=100,  # word vector dimensionality
             uidx += 1
             use_noise.set_value(1.)
 
-            x, x_mask, y, y_mask = prepare_data(x, y, maxlen=maxlen,
+            x, x_mask, y, y_mask = prepare_data_conv(x, y, kernels, psize,
+                                                maxlen=maxlen,
                                                 n_words_src=n_words_src,
                                                 n_words=n_words)
 
@@ -1262,7 +1310,7 @@ def train(dim_word=100,  # word vector dimensionality
             # validate model on validation set and early stop if necessary
             if numpy.mod(uidx, validFreq) == 0:
                 use_noise.set_value(0.)
-                valid_errs = pred_probs(f_log_probs, prepare_data,
+                valid_errs = pred_probs(f_log_probs, prepare_data_conv,
                                         model_options, valid)
                 valid_err = valid_errs.mean()
                 history_errs.append((cost,valid_err))
@@ -1298,7 +1346,7 @@ def train(dim_word=100,  # word vector dimensionality
         zipp(best_p, tparams)
 
     use_noise.set_value(0.)
-    valid_err = pred_probs(f_log_probs, prepare_data,
+    valid_err = pred_probs(f_log_probs, prepare_data_conv,
                            model_options, valid).mean()
 
     print 'Valid ', valid_err

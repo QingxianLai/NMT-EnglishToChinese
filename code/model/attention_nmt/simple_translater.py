@@ -86,7 +86,7 @@ def main(model, dictionary, dictionary_target, source_file, saveto, k=5,
             x = map(lambda ii: ii if ii < options['n_words'] else 1, x)
             x += [0]
             translation = _translate(x)
-            translations.append(_seqs2words([translation]))
+            translations.append(" ".join(_seqs2words([translation])))
     with open(saveto, 'w') as f:
         print >> f, '\n'.join(translations)
     print "Finish Translating!"

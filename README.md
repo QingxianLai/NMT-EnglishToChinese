@@ -1,3 +1,3 @@
 # NMT-EnglishToChinese
 
-## team members: Qingxian Lai, Yi Liu
+## team members: Qingxian Lai, Yi Liu, Junbo Zhao

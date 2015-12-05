@@ -1,8 +1,0 @@
-
-/opt/torque/mom_priv/jobs/7106102.SC: line 18: 30008 Illegal instruction     THEANO_FLAGS=floatX=float32 python -u -m code.model.attention_nmt.simple_translater -n /home/ql516/NLUDR/NMT-EnglishToChinese/results/attention_nmt_seg/model.npz /home/ql516/NLUDR/NMT-EnglishToChinese/data/zh/seg/zh.train.seg.tok.pkl /home/ql516/NLUDR/NMT-EnglishToChinese/data/en/train.en.tok.pkl /home/ql516/NLUDR/NMT-EnglishToChinese/data/zh/seg/zh.test.seg.tok /home/ql516/NLUDR/NMT-EnglishToChinese/results/attention_nmt_seg/test.translation
-
-
-
-
-
-

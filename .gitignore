@@ -3,5 +3,6 @@
 **/.DS_Store
 *.pyc
 code/experiments/attention_nmt_no_seg/no_seg.o7091294
-
+*.pynb_checkpoints*
+*.ipynb
 
